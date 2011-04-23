@@ -1,4 +1,6 @@
 MongoShop::Application.routes.draw do
+  resources :categories
+
   resources :products
 
   devise_for :users

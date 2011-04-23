@@ -27,6 +27,12 @@
     <%= f.label :status %><br />
     <%= f.check_box :status %>
   </div>
+
+  <div class="field">
+    <%= f.label :category_id %><br />
+    <%= f.select :category_id, Category.tree, { :include_blank => "Select category" } %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
