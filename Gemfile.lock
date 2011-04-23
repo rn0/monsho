@@ -57,6 +57,7 @@ GEM
       will_paginate (~> 3.0.pre)
     mongoid-tree (0.6.0)
       mongoid (~> 2.0.0)
+    nokogiri (1.4.4.1-x86-mingw32)
     orm_adapter (0.0.4)
     polyglot (0.3.1)
     rack (1.2.2)
@@ -98,5 +99,6 @@ DEPENDENCIES
   devise
   mongoid (~> 2.0)
   mongoid-tree
+  nokogiri
   rails (= 3.0.7)
   thin
