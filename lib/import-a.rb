@@ -30,7 +30,7 @@ require 'Zlib'
           sub_reader.each do |sub_node|
             next unless sub_node.name == "PodGrupa"
 
-            sub_cat = Category.find_or_create_by(:name => sub_node.attribute("nazwa"), :parent_id => main_category_name.id)
+            sub_cat = Category.find_or_initialize_by(:name => sub_node.attribute("nazwa"), :parent_id => main_category_name.id)
             sub_cat.parent = main_category_name
             sub_cat.save
 
