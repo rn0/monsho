@@ -16,4 +16,6 @@ class Product
   validates_inclusion_of :status, :in => [true, false]
 
   belongs_to :category
+
+  paginates_per 20
 end
