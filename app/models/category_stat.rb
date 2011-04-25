@@ -5,6 +5,26 @@ class CategoryStat
 
   belongs_to :category
 
+  def active_products
+    value['active'].to_i
+  end
+
+  def all_products
+    value['all'].to_i
+  end
+
+  def average_price
+    value['active_price_avg']
+  end
+
+  def min_price
+    value['min_price']
+  end
+
+  def max_price
+    value['max_price']
+  end
+
   def self.calculate
     map = <<JS
 function() {
