@@ -7,6 +7,7 @@ class Product
   field :price, :type => Float
   field :quantity, :type => Integer
   field :status, :type => Boolean
+  index :status
   field :foreign_key, :type => String
   field :description, :type => Array
   field :description_crc, :type => Integer
@@ -19,4 +20,7 @@ class Product
   belongs_to :category
 
   paginates_per 20
+
+  scope :active, where("status" => true)
+  scope :inactive, where("status" => false)
 end

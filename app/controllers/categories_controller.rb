@@ -14,6 +14,16 @@ class CategoriesController < ApplicationController
   # GET /categories/1.xml
   def show
     @category = Category.find(params[:id])
+    @products = @category.products.active.page(params[:page])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @category }
+    end
+  end
+
+  def archive
+    @category = Category.find(params[:id])
     @products = @category.products.page(params[:page])
 
     respond_to do |format|

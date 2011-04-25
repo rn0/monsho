@@ -1,6 +1,7 @@
 MongoShop::Application.routes.draw do
-  resources :categories
-
+  resources :categories do
+    get "archive", :on => :member
+  end
   resources :products
 
   devise_for :users
