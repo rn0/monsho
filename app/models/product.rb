@@ -10,6 +10,7 @@ class Product
   field :foreign_key, :type => String
   field :description, :type => Array
   field :description_crc, :type => Integer
+  field :categories, :type => Array
 
   validates_presence_of :name, :net_price, :quantity, :category_id
   validates_numericality_of :net_price, :greater_than => 0

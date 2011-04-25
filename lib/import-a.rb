@@ -13,6 +13,7 @@ require 'Zlib'
       start = Time.now
 
       categories = {}
+      categories_path = {}
       manufacturers = {}
 
       products_count = 0
@@ -34,6 +35,7 @@ require 'Zlib'
             sub_cat.parent = main_category_name
             sub_cat.save
 
+            categories_path[sub_node.attribute("id")] = sub_cat.ancestors_and_self.collect(&:id)
             categories[sub_node.attribute("id")] = sub_cat.id
           end
 #        elsif node.name == "producent"
@@ -64,6 +66,7 @@ require 'Zlib'
           p.status          = (p.quantity > 0)
           #p.manufacturer_id = manufacturers[node.attribute("producent")]
           p.category_id     = category unless category.nil?
+          p.categories      = categories_path[node.attribute("grupa")]
 
           unless node.inner_xml.empty?
             params = {}

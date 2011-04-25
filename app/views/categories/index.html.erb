@@ -3,6 +3,8 @@
 <table>
   <tr>
     <th>Name</th>
+    <th>Active</th>
+    <th>All</th>
     <th></th>
     <th></th>
     <th></th>
@@ -11,6 +13,13 @@
 <% @categories.each do |category| %>
   <tr>
     <td><%= Category.spacer * category.depth %><%= category.name %></td>
+    <% if category.category_stat %>
+    <td><%= category.category_stat.value['active']%></td>
+    <td><%= category.category_stat.value['all']%></td>
+    <% else %>
+    <td></td>
+    <td></td>
+    <% end %>
     <td><%= link_to 'Show', category %></td>
     <td><%= link_to 'Edit', edit_category_path(category) %></td>
     <td><%= link_to 'Destroy', category, :confirm => 'Are you sure?', :method => :delete %></td>

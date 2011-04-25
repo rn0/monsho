@@ -1,5 +1,25 @@
 <h1><%= @category.name %></h1>
 
+<% if @category.category_stat %>
+<table>
+  <tr>
+    <th>All</th><td><%= @category.category_stat.value['all'] %></td>
+  </tr>
+  <tr>
+    <th>Active</th><td><%= @category.category_stat.value['active'] %></td>
+  </tr>
+  <tr>
+    <th>Avg price</th><td><%= @category.category_stat.value['active_price_avg'] %></td>
+  </tr>
+  <tr>
+    <th>Min price</th><td><%= @category.category_stat.value['min_price'] %></td>
+  </tr>
+  <tr>
+    <th>Max price</th><td><%= @category.category_stat.value['max_price'] %></td>
+  </tr>
+</table>
+<% end %>
+
 <%= render :partial => 'shared/products', :object => @products %>
 
 <%= paginate @products %>

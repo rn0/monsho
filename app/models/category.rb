@@ -10,6 +10,7 @@ class Category
   validates_associated :parent, :children
 
   has_many :products
+  has_one :category_stat, :foreign_key => "_id"
 
   @@spacer = '&mdash;'.html_safe
   cattr_accessor :spacer
