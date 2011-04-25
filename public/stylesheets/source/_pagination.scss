@@ -1,0 +1,29 @@
+nav.pagination {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  overflow: hidden;
+
+  span.page, span.next, span.prev, span.last, span.first {
+    display: block;
+    float: left;
+    text-align: center;
+    margin-right: 5px;
+  }
+  $padding: 0px 10px 0px 10px;
+  span.current {
+    border: 1px solid #666;
+    padding: $padding;
+    background-color: #fff694;
+  }
+
+  a {
+    display: block;
+    border: 1px solid #efefef;
+    padding: $padding;
+
+    &:hover {
+      border: 1px solid #666;
+    }
+  }
+}

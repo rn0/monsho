@@ -1,0 +1,94 @@
+@import "reset";
+
+$line-height: 24px;
+
+body {
+  font-family: Cambria, Georgia, "Times New Roman", Times, serif;
+  background: #fff;
+  color: #333;
+}
+#wrapper {
+  max-width: 1260px;
+  min-width: 960px;
+  margin: 0 auto;
+  line-height: $line-height / 16px;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: $line-height;
+  font-weight: bold;
+}
+h1 {
+  font-size: 1.5em; /* 24px --> 24 ÷ 16 = 1.5 */
+  line-height: 1em; /* 24px --> 24 ÷ 24 = 1 */
+}
+
+h2 {
+  font-size: 1.375em; /* 22px --> 22 ÷ 16 = 1.375 */
+  line-height: 1.0909em; /* 24px --> 24 ÷ 22 = 1.090909(09) */
+}
+
+h3 {
+  font-size: 1.25em; /* 20px --> 20 ÷ 16 = 1.25 */
+  line-height: 1.2em; /* 24px --> 24 ÷ 20 = 1.2 */
+}
+
+h4 {
+  font-size: 1.125em; /* 18px --> 18 ÷ 16 = 1.125 */
+  line-height: 1.333em; /* 24px --> 24 ÷ 18 = 1.3333333(3) */
+}
+
+h5, h6 {
+  font-size: 1em; /* 16px --> 16 ÷ 16 = 1 */
+  line-height: 1.5em; /* 24px --> 24 ÷ 16 = 1.5 */
+}
+
+header {
+  height: 3 * $line-height;
+  background: #1E5799; /* old browsers */
+  background: -moz-linear-gradient(top, #1E5799 0%, #2989D8 50%, #7db9e8 100%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1E5799), color-stop(50%,#2989D8), color-stop(100%,#7db9e8)); /* webkit */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1E5799', endColorstr='#7db9e8',GradientType=0 ); /* ie */
+  background: -o-linear-gradient(top, #1E5799 0%,#2989D8 50%,#7db9e8 100%); /* opera */
+
+  #site-name a {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    line-height: 3 * $line-height - 2 * 10px;
+    font-size: 1.5em;
+  }
+}
+
+footer {
+  background-color: #efefef;
+  height: 200px;
+}
+
+#navigation {
+  width: 200px;
+  float: left;
+  margin-top: 10px;
+
+  ul {
+    list-style: none;
+  }
+}
+
+#content {
+  padding-left: 210px;
+  padding-top: 10px;
+}
+
+table {
+  $table-border: 1px solid #efefef;
+  border: $table-border;
+  margin-bottom: 20px;
+
+  th, td {
+    border: $table-border;
+    padding: 5px;
+  }
+}
+
+@import "forms";
+@import "pagination";
