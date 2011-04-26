@@ -14,7 +14,7 @@ class CategoriesController < ApplicationController
   # GET /categories/1.xml
   def show
     @category = Category.find(params[:id])
-    @products = @category.products.active.page(params[:page])
+    @products = @category.products.active.without(:description).page(params[:page])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,7 +24,7 @@ class CategoriesController < ApplicationController
 
   def archive
     @category = Category.find(params[:id])
-    @products = @category.products.page(params[:page])
+    @products = @category.products.without(:description).page(params[:page])
 
     respond_to do |format|
       format.html # show.html.erb
