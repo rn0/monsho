@@ -11,7 +11,7 @@
       <tr>
         <td><%= link_to p.name, product_path(p) %></td>
         <td><%= p.status %></td>
-        <td><%= p.price %></td>
+        <td><%= number_to_currency p.price %></td>
       </tr>
   <% end %>
   </tbody>

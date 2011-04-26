@@ -1,12 +1,15 @@
-<p>
-  <b>Name:</b>
-  <%= @product.name %>
-</p>
+<h1><%= @product.name %></h1>
 
 <p>
   <b>Net price:</b>
-  <%= @product.net_price %>
+  <%= number_to_currency @product.net_price %>
 </p>
+
+<p>
+  <b>Price:</b>
+  <%= number_to_currency @product.price %>
+</p>
+
 
 <p>
   <b>Quantity:</b>
@@ -22,6 +25,15 @@
   <b>Category:</b>
   <%= @product.category.path %>
 </p>
+<h2>Description</h2>
+<table id="product-description">
+  <% @product.description.each do |item| %>
+  <tr>
+    <th><%= item['name'] %></th>
+    <td><%= item['value'] %></td>
+  </tr>
+  <% end %>
+</table>
 
 
 
