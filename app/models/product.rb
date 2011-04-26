@@ -13,11 +13,12 @@ class Product
   field :description_crc, :type => Integer
   field :categories, :type => Array
 
-  validates_presence_of :name, :net_price, :quantity, :category_id
+  validates_presence_of :name, :net_price, :quantity, :category_id, :manufacturer_id
   validates_numericality_of :net_price, :greater_than => 0
   validates_inclusion_of :status, :in => [true, false]
 
   belongs_to :category
+  belongs_to :manufacturer
 
   paginates_per 20
 

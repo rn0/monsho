@@ -38,17 +38,17 @@ require 'Zlib'
             categories_path[sub_node.attribute("id")] = sub_cat.ancestors_and_self.collect(&:id)
             categories[sub_node.attribute("id")] = sub_cat.id
           end
-#        elsif node.name == "producent"
-#          manufacturer_name = node.attribute("nazwa")
-#          manufacturer_id = node.attribute("id")
-#
-#          if manufacturer_id == "BEZ" # HACK!
-#            manufacturer_name = "Bez nazwy"
-#          end
-#
-#          m = Manufacturer.find_or_create_by_name(manufacturer_name)
-#
-#          manufacturers[manufacturer_id] = m.id
+        elsif node.name == "producent"
+          manufacturer_name = node.attribute("nazwa")
+          manufacturer_id = node.attribute("id")
+
+          if manufacturer_id == "BEZ" # HACK!
+            manufacturer_name = "Bez nazwy"
+          end
+
+          m = Manufacturer.find_or_create_by(:name => manufacturer_name)
+
+          manufacturers[manufacturer_id] = m.id
         elsif node.name == "produkt"
           foreign_key = node.attribute("id")
           warehouse = 1
@@ -64,7 +64,7 @@ require 'Zlib'
           #p.warehouse_id    = warehouse
           p.quantity        = node.attribute("dostepny").to_i
           p.status          = (p.quantity > 0)
-          #p.manufacturer_id = manufacturers[node.attribute("producent")]
+          p.manufacturer_id = manufacturers[node.attribute("producent")]
           p.category_id     = category unless category.nil?
           p.categories      = categories_path[node.attribute("grupa")]
 

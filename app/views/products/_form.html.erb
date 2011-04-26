@@ -33,6 +33,11 @@
     <%= f.select :category_id, Category.tree, { :include_blank => "Select category" } %>
   </div>
 
+  <div class="field">
+    <%= f.label :manufacturer_id %><br />
+    <%= f.collection_select :manufacturer_id, Manufacturer.all, :_id, :name, { :include_blank => "Select manufacturer" } %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
