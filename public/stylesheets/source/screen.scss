@@ -65,17 +65,21 @@ footer {
 }
 
 #navigation {
-  width: 200px;
+  width: 250px;
   float: left;
   margin-top: 10px;
 
   ul {
     list-style: none;
   }
+
+  ul ul {
+    margin-left: 10px;
+  }
 }
 
 #content {
-  padding-left: 210px;
+  padding-left: 260px;
   padding-top: 10px;
 }
 

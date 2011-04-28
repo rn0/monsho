@@ -24,6 +24,35 @@ class Category
     nodes
   end
 
+  def tree_by_path
+    Rails.logger.debug "tree_by_path"
+    ids = if parent_ids.empty?
+            [id]
+          else
+            parent_ids
+          end
+    
+    base_class.where(:parent_id.in => [nil, *ids])
+  end
+
+  def self.arrange
+    arrange_nodes all
+  end
+
+  def self.arrange_nodes(nodes)
+    nodes.inject({}) do |arranged_nodes, node|
+      ret = node.parent_ids.inject(arranged_nodes) do |insertion_point, ancestor_id|
+        insertion_point.each do |parent, children|
+          # Change the insertion point to children if node is a descendant of this parent
+          insertion_point = children if ancestor_id == parent.id
+        end
+        insertion_point
+      end
+      ret[node] = {}
+      arranged_nodes
+    end
+  end
+
   def path
     self.ancestors_and_self.collect(&:name).join(' / ')
   end

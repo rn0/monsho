@@ -15,17 +15,13 @@
     <%= content_tag :div, msg, :id => "flash_#{name}" %>
   <% end %>
   <nav id="navigation">
-    <ul>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-      <li><a href="">Item 1</a></li>
-    </ul>
+    <%= if content_for? :navigation
+      yield :navigation
+    else
+      format_tree(Category.roots.arrange) do |category|
+        link_to(category.name, category_path(category))
+      end
+    end %>
   </nav>
   <div id="content">
     <%= yield %>
