@@ -15,6 +15,7 @@
     <%= content_tag :div, msg, :id => "flash_#{name}" %>
   <% end %>
   <nav id="navigation">
+    <%= yield :navigation %>
     <ul>
       <li><a href="">Item 1</a></li>
       <li><a href="">Item 1</a></li>
