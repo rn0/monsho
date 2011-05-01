@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
     @categories = Category.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.html.slim
       format.xml  { render :xml => @categories }
     end
   end
@@ -17,7 +17,7 @@ class CategoriesController < ApplicationController
     @products = @category.products.active.without(:description).page(params[:page])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show.html.slim
       format.xml  { render :xml => @category }
     end
   end
@@ -27,7 +27,7 @@ class CategoriesController < ApplicationController
     @products = @category.products.without(:description).page(params[:page])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show.html.slim
       format.xml  { render :xml => @category }
     end
   end
@@ -38,7 +38,7 @@ class CategoriesController < ApplicationController
     @category = Category.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html # new.html.slim
       format.xml  { render :xml => @category }
     end
   end

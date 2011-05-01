@@ -1,0 +1,6 @@
+h1
+  = @category.path
+  | / Archive
+
+== render :partial => 'shared/products', :object => @products
+== paginate @products

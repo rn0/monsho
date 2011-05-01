@@ -15,3 +15,8 @@ gem "kaminari"
 gem "jquery-rails"
 gem "sass"
 gem "mongo-rails-instrumentation"
+gem "slim"
+
+group :development do
+  gem "slim-rails"
+end

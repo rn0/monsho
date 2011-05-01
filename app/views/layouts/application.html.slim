@@ -1,0 +1,27 @@
+doctype 5
+html
+  head
+    title MonSho
+    meta name="keywords" content=""
+    meta name="description" content=""
+    = stylesheet_link_tag :all
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+
+  body
+    #wrapper
+      header
+        #site-name
+          a href=root_path MonSho
+      - flash.each do |name, msg|
+          #flash_#{name} msg
+      nav#navigation
+        - if content_for? :navigation
+          = yield :navigation
+        - else
+          = format_tree(Category.roots.arrange) do |category|
+            - link_to(category.name, category_path(category))
+      #content
+        = yield
+      div style="clear: both"
+      footer

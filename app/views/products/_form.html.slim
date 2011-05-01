@@ -1,0 +1,36 @@
+= form_for(@product) do |f|
+  - if @product.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@product.errors.count, "error")
+        | prohibited this product from being saved:
+      ul
+        - @product.errors.full_messages.each do |msg|
+          li = msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .field
+    = f.label :net_price
+    = f.text_field :net_price
+
+  .field
+    = f.label :quantity
+    = f.text_field :quantity
+
+  .field
+    = f.label :status
+    = f.check_box :status
+
+  .field
+    = f.label :category_id
+    = f.select :category_id, Category.tree, { :include_blank => "Select category" }
+
+  .field
+    = f.label :manufacturer_id
+    = f.collection_select :manufacturer_id, Manufacturer.all, :_id, :name, { :include_blank => "Select manufacturer" }
+
+  .actions
+    = f.submit

@@ -1,0 +1,31 @@
+- content_for :navigation do
+  = format_tree(@category.tree_by_path.arrange) do |category|
+    = link_to(category.name, category_path(category))
+
+
+h1 = @category.path
+
+- if @category.category_stat
+  table
+    tr
+      th All
+      td = number_with_delimiter @category.category_stat.all_products
+    tr
+      th Active
+      td = number_with_delimiter @category.category_stat.active_products
+    tr
+      th Avg price
+      td = number_to_currency @category.category_stat.average_price
+    tr
+      th Min price
+      td = number_to_currency @category.category_stat.min_price
+    tr
+      th Max price
+      td = number_to_currency @category.category_stat.max_price
+
+
+== render :partial => 'shared/products', :object => @products
+== paginate @products
+
+#products-archive
+  = link_to "Archive", archive_category_path(@category)

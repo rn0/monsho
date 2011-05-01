@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
     @products = Product.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.html.slim
       format.xml  { render :xml => @products }
     end
   end
@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show.html.slim
       format.xml  { render :xml => @product }
     end
   end
@@ -27,7 +27,7 @@ class ProductsController < ApplicationController
     @product = Product.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html # new.html.slim
       format.xml  { render :xml => @product }
     end
   end

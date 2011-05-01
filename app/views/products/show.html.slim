@@ -1,0 +1,31 @@
+- content_for :navigation do
+  = format_tree(@product.category.tree_by_path.arrange) do |category|
+    = link_to(category.name, category_path(category))
+
+h1 = @product.name
+ul
+  li
+    strong Net price: 
+    = number_to_currency @product.net_price
+  li
+    strong Price:
+    = number_to_currency @product.price
+  li
+    strong Quantity: 
+    = @product.quantity
+  li
+    strong Status: 
+    = @product.status
+  li
+    strong Manufacturer: 
+    = @product.manufacturer.name
+  li
+    strong Category: 
+    = @product.category.path
+
+h2 Description
+table#product-description
+  - @product.description.each do |item|
+    tr
+      th = item['name']
+      td = item['value']
