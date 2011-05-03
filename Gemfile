@@ -16,6 +16,7 @@ gem "jquery-rails"
 gem "sass"
 gem "mongo-rails-instrumentation"
 gem "slim"
+gem "rsolr"
 
 group :development do
   gem "slim-rails"
