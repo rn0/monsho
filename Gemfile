@@ -17,6 +17,7 @@ gem "sass"
 gem "mongo-rails-instrumentation"
 gem "slim"
 gem "rsolr"
+gem "babosa"
 
 group :development do
   gem "slim-rails"

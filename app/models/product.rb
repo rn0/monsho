@@ -12,6 +12,8 @@ class Product
   field :description, :type => Array
   field :description_crc, :type => Integer
   field :categories, :type => Array
+  field :category_name, :type => Array
+  field :manufacturer_name, :type => String
 
   validates_presence_of :name, :net_price, :quantity, :category_id, :manufacturer_id
   validates_numericality_of :net_price, :greater_than => 0

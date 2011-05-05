@@ -15,56 +15,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
-<!--  
- This is the Solr schema file. This file should be named "schema.xml" and
- should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
- or located where the classloader for the Solr webapp can find it.
-
- This example schema is the recommended starting point for users.
- It should be kept correct and concise, usable out-of-the-box.
-
- For more information, on how to customize this file, please see
- http://wiki.apache.org/solr/SchemaXml
-
- PERFORMANCE NOTE: this schema includes many optional features and should not
- be used for benchmarking.  To improve performance one could
-  - set stored="false" for all fields possible (esp large fields) when you
-    only need to search on the field but don't need to return the original
-    value.
-  - set indexed="false" if you don't need to search on the field, but only
-    return the field as a result of searching on other indexed fields.
-  - remove all unneeded copyField statements
-  - for best index size and searching performance, set "index" to false
-    for all general text fields, use copyField to copy them to the
-    catchall "text" field, and use that for searching.
-  - For maximum indexing performance, use the StreamingUpdateSolrServer
-    java client.
-  - Remember to run the JVM in server mode, and use a higher logging level
-    that avoids logging every request
--->
-
-<schema name="example" version="1.3">
-  <!-- attribute "name" is the name of this schema and is only used for display purposes.
-       Applications should change this to reflect the nature of the search collection.
-       version="1.2" is Solr's version number for the schema syntax and semantics.  It should
-       not normally be changed by applications.
-       1.0: multiValued attribute did not exist, all fields are multiValued by nature
-       1.1: multiValued attribute introduced, false by default 
-       1.2: omitTermFreqAndPositions attribute introduced, true by default except for text fields.
-       1.3: removed optional field compress feature
-     -->
-
+<schema name="monsho" version="1.3">
   <types>
-    <!-- field type definitions. The "name" attribute is
-       just a label to be used by field definitions.  The "class"
-       attribute and any other attributes determine the real
-       behavior of the fieldType.
-         Class names starting with "solr" refer to java classes in the
-       org.apache.solr.analysis package.
-    -->
-
     <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
 
@@ -405,27 +357,6 @@
          any data added to them will be ignored outright.  --> 
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
 
-    <!-- This point type indexes the coordinates as separate fields (subFields)
-      If subFieldType is defined, it references a type, and a dynamic field
-      definition is created matching *___<typename>.  Alternately, if 
-      subFieldSuffix is defined, that is used to create the subFields.
-      Example: if subFieldType="double", then the coordinates would be
-        indexed in fields myloc_0___double,myloc_1___double.
-      Example: if subFieldSuffix="_d" then the coordinates would be indexed
-        in fields myloc_0_d,myloc_1_d
-      The subFields are an implementation detail of the fieldType, and end
-      users normally should not need to know about them.
-     -->
-    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
-
-    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-   <!--
-    A Geohash is a compact representation of a latitude longitude pair in a single field.
-    See http://wiki.apache.org/solr/SpatialSearch
-   -->
-    <fieldtype name="geohash" class="solr.GeoHashField"/>
  </types>
 
 
@@ -454,63 +385,14 @@
    -->
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-   <field name="sku" type="textTight" indexed="true" stored="true" omitNorms="true"/>
+   <field name="foreign_key" type="textTight" indexed="true" stored="true" omitNorms="true"/>
    <field name="name" type="textgen" indexed="true" stored="true"/>
-   <field name="alphaNameSort" type="alphaOnlySort" indexed="true" stored="false"/>
-   <field name="manu" type="textgen" indexed="true" stored="true" omitNorms="true"/>
-   <field name="cat" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="features" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="includes" type="text" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
+   <field name="manufacturer" type="string" indexed="true" stored="true" omitNorms="true"/>
+   <field name="category" type="string" indexed="true" stored="true" multiValued="true"/>
 
-   <field name="weight" type="float" indexed="true" stored="true"/>
-   <field name="price"  type="float" indexed="true" stored="true"/>
-   <field name="popularity" type="int" indexed="true" stored="true" />
-   <field name="inStock" type="boolean" indexed="true" stored="true" />
+   <field name="price"  type="tfloat" indexed="true" stored="true"/>
+   <field name="status" type="boolean" indexed="true" stored="true" />
 
-   <!--
-   The following store examples are used to demonstrate the various ways one might _CHOOSE_ to
-    implement spatial.  It is highly unlikely that you would ever have ALL of these fields defined.
-    -->
-   <field name="store" type="location" indexed="true" stored="true"/>
-
-   <!-- Common metadata fields, named specifically to match up with
-     SolrCell metadata when parsing rich documents such as Word, PDF.
-     Some fields are multiValued only because Tika currently may return
-     multiple values for them.
-   -->
-   <field name="title" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="subject" type="text" indexed="true" stored="true"/>
-   <field name="description" type="text" indexed="true" stored="true"/>
-   <field name="comments" type="text" indexed="true" stored="true"/>
-   <field name="author" type="textgen" indexed="true" stored="true"/>
-   <field name="keywords" type="textgen" indexed="true" stored="true"/>
-   <field name="category" type="textgen" indexed="true" stored="true"/>
-   <field name="content_type" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="last_modified" type="date" indexed="true" stored="true"/>
-   <field name="links" type="string" indexed="true" stored="true" multiValued="true"/>
-
-
-   <!-- catchall field, containing all other searchable text fields (implemented
-        via copyField further on in this schema  -->
-   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
-
-   <!-- catchall text field that indexes tokens both normally and in reverse for efficient
-        leading wildcard queries. -->
-   <field name="text_rev" type="text_rev" indexed="true" stored="false" multiValued="true"/>
-
-   <!-- non-tokenized version of manufacturer to make it easier to sort or group
-        results by manufacturer.  copied from "manu" via copyField -->
-   <field name="manu_exact" type="string" indexed="true" stored="false"/>
-
-   <field name="payloads" type="payloads" indexed="true" stored="true"/>
-
-   <!-- Uncommenting the following will create a "timestamp" field using
-        a default value of "NOW" to indicate when each document was indexed.
-     -->
-   <!--
-   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-     -->
-   
 
    <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
         will be used if the name matches any of the patterns.
@@ -528,27 +410,7 @@
    <dynamicField name="*_f"  type="float"  indexed="true"  stored="true"/>
    <dynamicField name="*_d"  type="double" indexed="true"  stored="true"/>
 
-   <!-- Type used to index the lat and lon components for the "location" FieldType -->
-   <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
-
-   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-   <dynamicField name="*_p"  type="location" indexed="true" stored="true"/>
-
-   <!-- some trie-coded dynamic fields for faster range queries -->
-   <dynamicField name="*_ti" type="tint"    indexed="true"  stored="true"/>
-   <dynamicField name="*_tl" type="tlong"   indexed="true"  stored="true"/>
-   <dynamicField name="*_tf" type="tfloat"  indexed="true"  stored="true"/>
-   <dynamicField name="*_td" type="tdouble" indexed="true"  stored="true"/>
-   <dynamicField name="*_tdt" type="tdate"  indexed="true"  stored="true"/>
-
-   <dynamicField name="*_pi"  type="pint"    indexed="true"  stored="true"/>
-
-   <dynamicField name="ignored_*" type="ignored" multiValued="true"/>
-   <dynamicField name="attr_*" type="textgen" indexed="true" stored="true" multiValued="true"/>
-
-   <dynamicField name="random_*" type="random" />
-
-   <!-- uncomment the following to ignore any fields that don't already match an existing 
+   <!-- uncomment the following to ignore any fields that don't already match an existing
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
         unknown fields indexed and/or stored by default --> 
@@ -556,52 +418,7 @@
    
  </fields>
 
- <!-- Field to use to determine and enforce document uniqueness. 
-      Unless this field is marked with required="false", it will be a required field
-   -->
  <uniqueKey>id</uniqueKey>
-
- <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>text</defaultSearchField>
-
- <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
+ <defaultSearchField>name</defaultSearchField>
  <solrQueryParser defaultOperator="OR"/>
-
-  <!-- copyField commands copy one field to another at the time a document
-        is added to the index.  It's used either to index the same field differently,
-        or to add multiple fields to the same field for easier/faster searching.  -->
-
-   <copyField source="cat" dest="text"/>
-   <copyField source="name" dest="text"/>
-   <copyField source="manu" dest="text"/>
-   <copyField source="features" dest="text"/>
-   <copyField source="includes" dest="text"/>
-   <copyField source="manu" dest="manu_exact"/>
-	
-   <!-- Above, multiple source fields are copied to the [text] field. 
-	  Another way to map multiple source fields to the same 
-	  destination field is to use the dynamic field syntax. 
-	  copyField also supports a maxChars to copy setting.  -->
-	   
-   <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
-
-   <!-- copy name to alphaNameSort, a field designed for sorting by name -->
-   <!-- <copyField source="name" dest="alphaNameSort"/> -->
- 
-
- <!-- Similarity is the scoring routine for each document vs. a query.
-      A custom similarity may be specified here, but the default is fine
-      for most applications.  -->
- <!-- <similarity class="org.apache.lucene.search.DefaultSimilarity"/> -->
- <!-- ... OR ...
-      Specify a SimilarityFactory class name implementation
-      allowing parameters to be used.
- -->
- <!--
- <similarity class="com.example.solr.CustomSimilarityFactory">
-   <str name="paramkey">param value</str>
- </similarity>
- -->
-
-
 </schema>

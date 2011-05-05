@@ -1,12 +1,23 @@
 require 'Zlib'
+require 'rsolr'
+require 'babosa'
 #module Import
 
   class ImportA
     attr_accessor :file
 
+    TYPE_MAP = {
+      'varchar' => '_s',
+      'float' => '_f',
+      'int' => '_i',
+      'bit' => '_b'
+    }
+
     def initialize(file)
       puts "Using: #{file}"
       @file = file
+      @solr = RSolr.connect
+      @doc_cache = []
     end
 
     def import
@@ -14,7 +25,9 @@ require 'Zlib'
 
       categories = {}
       categories_path = {}
+      category_name = {}
       manufacturers = {}
+      manufacturer_name = {}
 
       products_count = 0
 
@@ -36,19 +49,22 @@ require 'Zlib'
             sub_cat.save
 
             categories_path[sub_node.attribute("id")] = sub_cat.ancestors_and_self.collect(&:id)
+            category_name[sub_node.attribute("id")] = sub_cat.ancestors_and_self.collect(&:name)
             categories[sub_node.attribute("id")] = sub_cat.id
           end
         elsif node.name == "producent"
-          manufacturer_name = node.attribute("nazwa")
-          manufacturer_id = node.attribute("id")
+          name = node.attribute("nazwa")
+          id = node.attribute("id")
 
-          if manufacturer_id == "BEZ" # HACK!
-            manufacturer_name = "Bez nazwy"
+          if id == "BEZ" # HACK!
+            name = "Bez nazwy"
           end
 
-          m = Manufacturer.find_or_create_by(:name => manufacturer_name)
+          m = Manufacturer.find_or_create_by(:name => name)
 
-          manufacturers[manufacturer_id] = m.id
+          manufacturer_name[id] = name
+          manufacturers[id] = m.id
+          #puts "#{manufacturer_id} -> #{manufacturer_name}"
         elsif node.name == "produkt"
           foreign_key = node.attribute("id")
           warehouse = 1
@@ -65,8 +81,10 @@ require 'Zlib'
           p.quantity        = node.attribute("dostepny").to_i
           p.status          = (p.quantity > 0)
           p.manufacturer_id = manufacturers[node.attribute("producent")]
+          p.manufacturer_name = manufacturer_name[node.attribute("producent")]
           p.category_id     = category unless category.nil?
           p.categories      = categories_path[node.attribute("grupa")]
+          p.category_name   = category_name[node.attribute("grupa")]
 
           unless node.inner_xml.empty?
             params = {}
@@ -74,7 +92,7 @@ require 'Zlib'
             xml = "<dummy>#{node.inner_xml}</dummy>"
             crc32 = Zlib.crc32(xml)
 
-            unless p.description_crc == crc32
+            unless p.description_crc == crc32 && 1 == 2
               p.description_crc = crc32
 
               sub_reader = Nokogiri::XML::Reader(xml)
@@ -97,24 +115,58 @@ require 'Zlib'
                 #  value = value.to_b
                 end
 
-                new_item = { name => value }
+                new_item = { name => {
+                  :name => name,
+                  :value => value,
+                  :type => type,
+                  :slug => name.to_slug.normalize.to_s
+                } }
 
                 params.merge!(new_item) do |name, v1, v2|
                   #puts "- #{foreign_key}: merge conflict '#{name}'"
-                  { name => "#{v1} #{v2}" }
+                  { name => {
+                    :name => name,
+                    :value => "#{v1[:value]} #{v2[:value]}",
+                    :type => "varchar",
+                    :slug => name.to_slug.normalize.to_s
+                  } }
                 end
               end
 
               p.description = params.reduce([]) do |acc, item|
-                acc.push({ :name => item[0], :value => item[1] })
+                acc.push(item[1])
               end
             end
           end
 
-          products_count += 1
-          unless p.save
+          if p.save
+            facets = p.description.reduce({}) do |acc, item|
+              t = TYPE_MAP[item[:type]]
+              if t && item[:slug] && item[:value]
+                acc["f-#{item[:slug]}#{t}"] = item[:value]
+              end
+              acc
+            end
+
+            @doc_cache.push({
+              :id => p.id,
+              :name => p.name,
+              :foreign_key => p.foreign_key,
+              :status => p.status,
+              :price => p.price,
+              :category => p.category_name,
+              :manufacturer => p.manufacturer_name
+            }.merge!(facets))
+
+
+            products_count += 1
+          else
             puts "#{foreign_key} = #{p.errors}"
-            products_count -= 1
+          end
+
+          if products_count % 100 == 0
+            @solr.add(@doc_cache)
+            @doc_cache.clear
           end
 
           puts "* #{products_count} in #{Time.now - start} seconds" if products_count % 1000 == 0
@@ -126,6 +178,9 @@ require 'Zlib'
 
       puts "Imported #{products_count} products in #{Time.now - start} seconds"
 
+      @solr.add(@doc_cache)
+      @doc_cache.clear
+      @solr.commit :commit_attributes => {}
     end
 
   end
