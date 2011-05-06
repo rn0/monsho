@@ -18,10 +18,10 @@ ul
     = @product.status
   li
     strong Manufacturer: 
-    = @product.manufacturer.name
+    = @product.manufacturer_name
   li
     strong Category: 
-    = @product.category.path
+    = @product.category_name.join(' / ')
 
 h2 Description
 table#product-description
