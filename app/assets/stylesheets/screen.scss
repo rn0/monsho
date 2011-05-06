@@ -1,4 +1,4 @@
-@import "reset";
+@import "/partials/reset";
 
 $line-height: 24px;
 
@@ -94,5 +94,5 @@ table {
   }
 }
 
-@import "forms";
-@import "pagination";
+@import "partials/forms";
+@import "partials/pagination";
