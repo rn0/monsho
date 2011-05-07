@@ -17,6 +17,7 @@ class Product
 
   validates_presence_of :name, :net_price, :quantity, :category_id, :manufacturer_id
   validates_numericality_of :net_price, :greater_than => 0
+  validates_numericality_of :price, :greater_than => 0
   validates_inclusion_of :status, :in => [true, false]
 
   belongs_to :category
