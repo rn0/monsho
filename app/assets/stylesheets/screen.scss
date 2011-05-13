@@ -49,6 +49,7 @@ header {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1E5799), color-stop(50%,#2989D8), color-stop(100%,#7db9e8)); /* webkit */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1E5799', endColorstr='#7db9e8',GradientType=0 ); /* ie */
   background: -o-linear-gradient(top, #1E5799 0%,#2989D8 50%,#7db9e8 100%); /* opera */
+  position: relative;
 
   #site-name a {
     display: block;
@@ -56,6 +57,12 @@ header {
     padding: 10px;
     line-height: 3 * $line-height - 2 * 10px;
     font-size: 1.5em;
+  }
+
+  nav {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 }
 
