@@ -1,6 +1,5 @@
 require 'Zlib'
 require 'rsolr'
-require 'babosa'
 #module Import
 
   class ImportA
@@ -119,17 +118,14 @@ require 'babosa'
                   :name => name,
                   :value => value,
                   :type => type,
-                  :slug => name.to_slug.normalize.to_s
                 } }
 
                 params.merge!(new_item) do |name, v1, v2|
-                  #puts "- #{foreign_key}: merge conflict '#{name}'"
-                  { name => {
+                  {
                     :name => name,
                     :value => "#{v1[:value]} #{v2[:value]}",
                     :type => "varchar",
-                    :slug => name.to_slug.normalize.to_s
-                  } }
+                  }
                 end
               end
 
@@ -161,7 +157,7 @@ require 'babosa'
 
             products_count += 1
           else
-            puts "#{foreign_key} = #{p.errors}"
+            puts "#{foreign_key} = #{p.errors.to_a.join('; ')}"
           end
 
           if products_count % 100 == 0

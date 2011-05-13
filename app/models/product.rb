@@ -9,7 +9,6 @@ class Product
   field :status, :type => Boolean
   index :status
   field :foreign_key, :type => String
-  field :description, :type => Array
   field :description_crc, :type => Integer
   field :categories, :type => Array
   field :category_name, :type => Array
@@ -22,9 +21,17 @@ class Product
 
   belongs_to :category
   belongs_to :manufacturer
-
-  paginates_per 20
+  embeds_many :description, class_name: 'ProductDescription'
 
   scope :active, where("status" => true)
   scope :inactive, where("status" => false)
+
+  after_validation :validate_description
+  def validate_description
+    if not self.errors.empty?
+      self.description.each do |d|
+        d.errors.each{ |attr, msg| self.errors.add(attr, msg) }
+      end
+    end
+  end
 end
