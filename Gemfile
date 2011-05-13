@@ -16,15 +16,11 @@ gem "slim"
 gem "rsolr"
 gem "babosa"
 
-group :development do
-  gem "slim-rails"
-end
 group :test, :development do
+  gem 'slim-rails'
   gem 'rspec-rails', '~>2.6.0.rc'
-end
-group :test do
-  #gem 'database_cleaner'
-  #gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
   #gem 'mongoid-rspec'
   gem 'spork', '~> 0.9.0.rc'
   gem 'valid_attribute'

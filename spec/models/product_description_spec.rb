@@ -8,9 +8,9 @@ describe ProductDescription do
 
   describe 'before save' do
     it 'should create slug' do
-      @p = Product.new
-      @p.description.create!({ name: 'test description', value: 'test value', type: 'varchar' })
-      @p.description.first.slug.should == 'test-description'
+      d = Factory.build(:product_description, :name => 'Test description')
+      d.run_callbacks(:save)
+      d.slug.should == 'test-description'
     end
   end
 end
