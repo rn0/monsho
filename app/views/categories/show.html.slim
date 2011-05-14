@@ -5,23 +5,23 @@
 
 h1 = @category.path
 
-- if @category.category_stat
+- if @category.stats
   table
     tr
       th All
-      td = number_with_delimiter @category.category_stat.all_products
+      td = number_with_delimiter @category.stats.all_products
     tr
       th Active
-      td = number_with_delimiter @category.category_stat.active_products
+      td = number_with_delimiter @category.stats.active_products
     tr
       th Avg price
-      td = number_to_currency @category.category_stat.average_price
+      td = number_to_currency @category.stats.average_price
     tr
       th Min price
-      td = number_to_currency @category.category_stat.min_price
+      td = number_to_currency @category.stats.min_price
     tr
       th Max price
-      td = number_to_currency @category.category_stat.max_price
+      td = number_to_currency @category.stats.max_price
 
 
 == render :partial => 'shared/products', :object => @products

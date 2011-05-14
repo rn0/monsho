@@ -9,8 +9,8 @@ class Category
   validates_presence_of :name
   validates_associated :parent, :children
 
+  embeds_one :stats, class_name: 'CategoryStat'
   has_many :products
-  has_one :category_stat, :foreign_key => "_id"
 
   @@spacer = '&mdash;'.html_safe
   cattr_accessor :spacer

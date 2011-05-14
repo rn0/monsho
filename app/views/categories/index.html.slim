@@ -16,9 +16,9 @@ table
       td
         = Category.spacer * category.depth
         = category.name
-      - if category.category_stat
-        td = number_with_delimiter category.category_stat.active_products
-        td = number_with_delimiter category.category_stat.all_products
+      - if category.stats
+        td = number_with_delimiter category.stats.active_products
+        td = number_with_delimiter category.stats.all_products
       - else
         td &mdash;
         td &mdash;
