@@ -176,7 +176,8 @@ require 'rsolr'
 
       @solr.add(@doc_cache)
       @doc_cache.clear
-      @solr.commit :commit_attributes => {}
+      @solr.commit
+      @solr.optimize
     end
 
   end

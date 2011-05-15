@@ -10,6 +10,7 @@ class Category
   validates_associated :parent, :children
 
   embeds_one :stats, class_name: 'CategoryStat'
+  embeds_many :facets, class_name: 'CategoryFacet'
   has_many :products
 
   @@spacer = '&mdash;'.html_safe
