@@ -1,4 +1,6 @@
 MongoShop::Application.routes.draw do
+  resources :searches
+
   resources :categories do
     get "archive", :on => :member
   end

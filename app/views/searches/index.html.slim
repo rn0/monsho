@@ -1,0 +1,21 @@
+h1 Listing searches
+
+table
+  tr
+    th Query
+    th Hits
+    th
+    th
+    th
+
+  - @searches.each do |search|
+    tr
+      td= search.query
+      td= search.hits
+      td= link_to 'Show', search
+      td= link_to 'Edit', edit_search_path(search)
+      td= link_to 'Destroy', search, :confirm => 'Are you sure?', :method => :delete
+
+br
+
+= link_to 'New Search', new_search_path

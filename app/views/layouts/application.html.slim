@@ -21,6 +21,11 @@ html
             - else
               li=link_to('Register', new_user_registration_path)
               li=link_to('Login', new_user_session_path)
+      div#search
+        = form_for Search.new do |f|
+          = f.label :query
+          = f.text_field :query
+          = f.submit 'Search'
       - flash.each do |name, msg|
           #flash_#{name} msg
       nav#navigation

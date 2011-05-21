@@ -1,0 +1,46 @@
+- content_for :navigation do
+  - if @info[:numFound] > 0
+    - @facets.each do |field, values|
+      div.facets-group
+        h2 = field
+        ul
+          - Hash[*values].each do |value, hits|
+            li
+              a href="#TODO"
+                = value
+                span (#{hits})
+  - else
+    p Nothing found
+
+h1 = @search.query
+
+p
+  ' Found:
+  strong
+    = @info[:numFound]
+  '; Time:
+  strong
+    = @info[:QTime]
+    | ms
+  '; Query hits:
+  strong
+    = @search.hits
+
+table
+  thead
+    tr
+      th Name
+      th Status
+      th Price
+  tbody
+    - @docs.each do |doc|
+      tr
+        td = link_to doc['name'], product_path(:id => doc['id'])
+        td = doc['status']
+        td = number_to_currency doc['price']
+
+= paginate @docs
+
+= link_to 'Edit', edit_search_path(@search)
+'|
+= link_to 'Back', searches_path
