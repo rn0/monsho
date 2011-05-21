@@ -27,7 +27,8 @@ html
           = f.text_field :query
           = f.submit 'Search'
       - flash.each do |name, msg|
-          #flash_#{name} msg
+        .flash class="#{name}"
+          = msg
       nav#navigation
         - if content_for? :navigation
           = yield :navigation
