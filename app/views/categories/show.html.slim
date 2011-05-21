@@ -35,8 +35,9 @@ h1 = @category.path
         td = f.count
         td = f.navigable
 
-== render :partial => 'shared/products', :object => @products
-== paginate @products
+- unless @products.empty?
+  == render :partial => 'shared/products', :object => @products
+  == paginate @products
 
 #products-archive
   = link_to "Archive", archive_category_path(@category)
