@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "3.1.0.beta1"
+gem "rails", "3.1.0.rc1"
 gem "eventmachine", "1.0.0.beta3"
 gem "thin"
 gem "mongoid",   :git => "git://github.com/mongoid/mongoid.git"
@@ -18,7 +18,7 @@ gem "babosa"
 
 group :test, :development do
   gem 'slim-rails'
-  gem 'rspec-rails', '~>2.6.0.rc'
+  gem 'rspec-rails'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   #gem 'mongoid-rspec'
