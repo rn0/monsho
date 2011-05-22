@@ -130,7 +130,7 @@ require 'rsolr'
               end
 
               p.description = params.reduce([]) do |acc, item|
-                acc.push(item[1])
+                acc.push(ProductDescription.new(item[1]))
               end
             end
           end
@@ -157,7 +157,7 @@ require 'rsolr'
 
             products_count += 1
           else
-            puts "#{foreign_key} = #{p.errors.to_a.join('; ')}"
+            puts "#{foreign_key} = #{p.errors.to_a.join(";\n")}"
           end
 
           if products_count % 100 == 0
