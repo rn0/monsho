@@ -71,10 +71,45 @@ footer {
   height: 200px;
 }
 
+@mixin navig-item {
+  li {
+    position: relative;
+
+    a {
+      display: block;
+      color: #000;
+      text-decoration: none;
+
+      overflow: hidden;
+      height: 24px;
+
+      span {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 100;
+        background-color: #fff;
+        color: #666;
+        padding-left: 5px;
+      }
+
+      &:hover {
+        color: red;
+        background-color: #efefef;
+
+        span {
+          background-color: #efefef;
+        }
+      }
+    }
+  }
+}
+
 #navigation {
   width: 250px;
   float: left;
   margin-top: 10px;
+  margin-bottom: 10px;
 
   ul {
     list-style: none;
@@ -83,6 +118,8 @@ footer {
   ul ul {
     margin-left: 10px;
   }
+
+  @include navig-item;
 }
 
 #content {
@@ -105,38 +142,11 @@ table {
 @import "partials/pagination";
 
 .facets-group {
+  margin-bottom: 20px;
+    
   h2 {
     border-bottom: 1px solid #ccc;
   }
 
-  ul {
-    li {
-      position: relative;
-
-      a {
-        display: block;
-        color: #000;
-        text-decoration: none;
-
-        overflow: hidden;
-        height: 24px;
-
-        &:hover {
-          color: red;
-        }
-      }
-
-      span {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 100;
-        background-color: #fff;
-        color: #666;
-        padding-left: 5px;
-      }
-    }
-  }
-
-  margin-bottom: 20px;
+  @include navig-item;
 }

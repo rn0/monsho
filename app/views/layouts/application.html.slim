@@ -34,7 +34,7 @@ html
           = yield :navigation
         - else
           = format_tree(Category.roots.arrange) do |category|
-            - link_to(category.name, category_path(category))
+            = link_to_category category
       #content
         = yield
       div style="clear: both"

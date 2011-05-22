@@ -1,13 +1,13 @@
 - content_for :navigation do
   - if @info[:numFound] > 0
-    - @facets.each do |field, values|
+    - @facets.each do |facet_name, values|
       div.facets-group
-        h2 = field
+        h2 = facet_name.dup
         ul
           - Hash[*values].each do |value, hits|
             li
               a href="#TODO"
-                = value
+                = value.dup
                 span (#{hits})
   - else
     p Nothing found

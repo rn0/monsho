@@ -10,4 +10,12 @@ module ApplicationHelper
       end
     end
   end
+
+  def link_to_category category
+    return nil if (category.nil? or category.name.nil?)
+    counter = (category.stats) ? category.stats.active_products.to_i : '-'
+    content_tag(:a, :href => category_path(category)) do
+      category.name.html_safe << " " << content_tag(:span, "(#{counter})")
+    end
+  end
 end
