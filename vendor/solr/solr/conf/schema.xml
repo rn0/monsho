@@ -356,6 +356,13 @@
     <!-- since fields of this type are by default not stored or indexed,
          any data added to them will be ignored outright.  --> 
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+    
+    <fieldType class="solr.TextField" name="text_auto">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
 
  </types>
 
@@ -387,6 +394,8 @@
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
    <field name="foreign_key" type="textTight" indexed="true" stored="true" omitNorms="true"/>
    <field name="name" type="textgen" indexed="true" stored="true"/>
+   <field name="name_autocomplete" type="text_auto" indexed="true" stored="true" multiValued="false" />
+   <copyField source="name" dest="name_autocomplete" />
    <field name="manufacturer" type="string" indexed="true" stored="true" omitNorms="true"/>
    <field name="category" type="string" indexed="true" stored="true" multiValued="true"/>
 

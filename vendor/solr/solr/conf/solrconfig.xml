@@ -1387,6 +1387,26 @@
     </highlighting>
   </searchComponent>
 
+  <searchComponent name="suggest" class="solr.SpellCheckComponent">
+    <lst name="spellchecker">
+      <str name="name">suggest</str>
+      <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="field">name_autocomplete</str>
+    </lst>
+  </searchComponent>
+
+  <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+    <lst name="defaults">
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">suggest</str>
+      <str name="spellcheck.count">10</str>
+      <str name="spellcheck.onlyMorePopular">true</str>
+    </lst>
+    <arr name="components">
+      <str>suggest</str>
+    </arr>
+  </requestHandler>
   <!-- Update Processors
 
        Chains of Update Processor Factories for dealing with Update
