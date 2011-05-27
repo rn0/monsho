@@ -45,15 +45,19 @@ require 'tire'
           }
         }
       end
+    end
 
-      
-
-      RestClient.put "#{es_base_path}/_settings ", '{
+    def index_properties refresh_interval, merge_factor
+      RestClient.put "#{es_base_path}/_settings ", %<{
         "index" : {
-            "refresh_interval" : "-1",
-            "merge.policy.merge_factor" : 30
+            "refresh_interval" : "#{refresh_interval}",
+            "merge.policy.merge_factor" : #{merge_factor}
         }
-      }'
+      }>
+    end
+
+    def optimize_index
+      RestClient.get "#{es_base_path}/_optimize?max_num_segments=5 "
     end
 
     def es_base_path
@@ -62,6 +66,8 @@ require 'tire'
 
     def _import
       products_count = 0
+
+      index_properties '-1', 30
 
       @reader.each do |node|
         next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
@@ -90,13 +96,8 @@ require 'tire'
 
       store @doc_cache
 
-      RestClient.put "#{es_base_path}/_settings ", '{
-        "index" : {
-            "refresh_interval" : "1s",
-            "merge.policy.merge_factor" : 10
-        }
-      }'
-      RestClient.get "#{es_base_path}/_optimize?max_num_segments=5 "
+      index_properties '1s', 10
+      optimize_index
 
       puts "Loaded #{@categories.count} categories"
       puts "Loaded #{@manufacturers.count} manufacturers"
