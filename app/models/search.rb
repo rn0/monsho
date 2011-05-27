@@ -21,21 +21,24 @@ class Search
   end
 
   def get_results page
-    response = RSolr.connect.paginate page || 1, 20, 'select', :params => {
-      :q => query,
-      :fl => 'id, name, status, price',
-      :facet => true,
-      'facet.mincount' => 1,
-      'facet.field' => ['category', 'manufacturer'],
-    }
-    docs = response['response']['docs'].extend ::PaginatedDocSet
-    docs.total_count = response['response']['numFound']
-    docs.page = page
-    info = {
-      :numFound => response['response']['numFound'],
-      :QTime => response['responseHeader']['QTime']
-    }
-    [info, docs, response['facet_counts']['facet_fields']]
+    _query = query
+    Tire.search 'monsho-catalog' do
+      query do
+        string "name:#{_query}"
+      end
+
+      size 20
+      from (page.to_i <= 1 ? 0 : (20 * (page.to_i - 1)))
+
+      fields [:id, :name, :price, :status]
+      
+      facet 'category' do
+        terms :category, :size => 20
+      end
+      facet 'manufacturer' do
+        terms :manufacturer, :size => 20
+      end
+    end
   end
   
   private

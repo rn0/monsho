@@ -7,7 +7,7 @@ namespace :import do
 
     require File.expand_path('lib/import-a.rb')
     action = ImportA.new(ENV['file'])
-    action.import;
+    action._import;
   end
 
   task :all => ["import:a"]

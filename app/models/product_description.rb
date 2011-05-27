@@ -7,8 +7,9 @@ class ProductDescription
   field :slug, :type => String
 
   embedded_in :product
-
-  validates_presence_of :name, :value, :type
+  # TODO: value
+  # This is due to the way Object#blank? handles boolean values: false.blank? # => true.
+  validates_presence_of :name, :type
   validates_inclusion_of :type, in: ['varchar', 'float', 'int', 'bit']
 
   before_save :create_slug

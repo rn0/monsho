@@ -13,7 +13,7 @@ gem "jquery-rails"
 gem "sass"
 #gem "mongo-rails-instrumentation"
 gem "slim"
-gem "rsolr"
+gem 'tire'
 gem "babosa"
 
 group :test, :development do

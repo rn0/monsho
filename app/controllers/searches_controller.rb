@@ -1,4 +1,4 @@
-require 'paginated_doc_set.rb'
+require 'tire_pagination_hack.rb'
 
 class SearchesController < ApplicationController
   # GET /searches
@@ -16,7 +16,7 @@ class SearchesController < ApplicationController
   # GET /searches/1.json
   def show
     @search = Search.where(:slug => params[:id]).first
-    @info, @docs, @facets = @search.get_results(params[:page])
+    @es = @search.get_results(params[:page])
 
     respond_to do |format|
       format.html # show.html.erb

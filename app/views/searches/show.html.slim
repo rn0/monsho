@@ -1,45 +1,45 @@
 - content_for :navigation do
-  - if @info[:numFound] > 0
-    - @facets.each do |facet_name, values|
+    - @es.results.facets.each do |facet_name, values|
       div.facets-group
         h2 = facet_name.dup
         ul
-          - Hash[*values].each do |value, hits|
+          - values['terms'].each do |value, hits|
             li
               a href="#TODO"
-                = value.dup
-                span (#{hits})
-  - else
-    p Nothing found
+                = value['term'].dup
+                span (#{value['count']})
+
 
 h1 = @search.query
+
+textarea style="width: 100%; height: 50px"
+  = @es.to_json
 
 p
   ' Found:
   strong
-    = @info[:numFound]
+    = @es.results.total
   '; Time:
   strong
-    = @info[:QTime]
-    | ms
-  '; Query hits:
-  strong
-    = @search.hits
+    = (@es.results.time.to_f / 1000)
+    | s
 
 table
   thead
     tr
+      th Score
       th Name
       th Status
       th Price
   tbody
-    - @docs.each do |doc|
+    - @es.results.each do |doc|
       tr
-        td = link_to doc['name'], product_path(:id => doc['id'])
-        td = doc['status']
-        td = number_to_currency doc['price']
+        td = number_with_precision doc._score
+        td = link_to doc.name, product_path(:id => doc.id)
+        td = doc.status
+        td = number_to_currency doc.price
 
-= paginate @docs
+= paginate @es.results
 
 = link_to 'Edit', edit_search_path(@search)
 '|
