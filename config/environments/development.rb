@@ -23,5 +23,6 @@ MongoShop::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   Slim::Engine.set_default_options :pretty => true
+  Tire.configure { logger 'log/elasticsearch.log' }
 end
 
