@@ -4,14 +4,6 @@ require 'tire'
 #module Import
 
   class ImportA
-    #attr_accessor :categories
-    #attr_accessor :categories_path
-    #attr_accessor :category_name
-    #attr_accessor :manufacturers
-    #attr_accessor :manufacturer_name
-    #attr_accessor :reader
-    #attr_accessor :doc_cache
-
     TYPE_MAP = {
       'varchar' => '_s',
       'float' => '_f',
@@ -35,15 +27,38 @@ require 'tire'
       @doc_cache = []
 
       Tire.index INDEX_NAME do
-        create :mappings => {
-          :product => {
-            :properties => {
-              :id             => { :type => 'string', :index => 'no' },
-              :category       => { :type => 'string', :index => 'not_analyzed' },
-              :manufacturer   => { :type => 'string', :index => 'not_analyzed' },
+        create({
+          :settings => {
+            :number_of_shards   => 1,
+            :number_of_replicas => 0
+          },
+          :mappings => {
+            :product => {
+              :properties => {
+                :id             => { :type => 'string', :index => 'no' },
+                :category       => { :type => 'string', :index => 'not_analyzed' },
+                :manufacturer   => { :type => 'string', :index => 'not_analyzed' },
+                :facets         => {
+                  :properties   => {
+                    :zasilanie                => { :type => 'string' },
+                    :wydajnosc                => { :type => 'string' },
+                    :pojemnosc                => { :type => 'string' },
+                    :'wbudowana-pamiec'       => { :type => 'string' },
+                    :bateria                  => { :type => 'string' },
+                    :waga                     => { :type => 'string' },
+                    :'rozdzielczosc-wydruku'  => { :type => 'string' },
+                    :'interfejs-fdd'          => { :type => 'string' },
+                    :'napiecie-zasilania'     => { :type => 'string' },
+                    :'ciezar'                 => { :type => 'string' },
+                    :'napiecie-wejsciowe'     => { :type => 'string' },
+                    :'zdolnosc-zamrazania-na-dobe' => { :type => 'string' },
+                    :'poziom-halasu'          => { :type => 'string' },
+                  }
+                }
+              }
             }
           }
-        }
+        })
       end
     end
 
