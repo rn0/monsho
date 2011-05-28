@@ -6,15 +6,15 @@
           - values['terms'].each do |value, hits|
             - if active_filter?(@search.filters, value['term'])
               li
-                a href=remove_search_filter_path(@search, facet_name)
+                a href=remove_search_filter_path(@search, facet_name) class="active"
                   strong [x]
                   = value['term'].dup
-                  span (#{value['count']})
+                  span #{value['count']}
             - else
               li
                 a href=search_filter_path(@search, facet_name => value['term'])
                   = value['term'].dup
-                  span (#{value['count']})
+                  span #{value['count']}
 
 
 h1 = link_to @search.query, search_path(@search)
