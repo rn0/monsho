@@ -16,7 +16,8 @@ class SearchesController < ApplicationController
   # GET /searches/1.json
   def show
     @search = Search.where(:slug => params[:id]).first
-    @es = @search.get_results(params[:page])
+    @search.filters = params[:filter] ? params[:filter][0] : {}
+    @es = @search.get_results params[:page]
 
     respond_to do |format|
       format.html # show.html.erb
