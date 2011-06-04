@@ -34,6 +34,16 @@ require 'tire'
           },
           :mappings => {
             :product => {
+              :dynamic_templates => [
+                {
+                  :facets_not_analyzed => {
+                    :path_match => 'facets.*',
+                    :mapping => {
+                      :index => 'not_analyzed'
+                    }
+                  }
+                }
+              ],
               :properties => {
                 :id             => { :type => 'string', :index => 'no' },
                 :category       => { :type => 'string', :index => 'not_analyzed' },
