@@ -41,7 +41,7 @@ table
       th Score
       th Name
       th Status
-      th Price
+      th = sortable 'price'
   tbody
     - @es.results.each do |doc|
       tr

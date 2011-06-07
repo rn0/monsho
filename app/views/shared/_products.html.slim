@@ -1,9 +1,9 @@
 table
   thead
     tr
-      th Name
+      th = sortable 'name'
       th Status
-      th Price
+      th = sortable 'price'
   tbody
     - products.each do |p|
       tr

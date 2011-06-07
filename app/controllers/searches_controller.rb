@@ -1,6 +1,8 @@
 require 'tire_pagination_hack.rb'
 
 class SearchesController < ApplicationController
+  helper_method :sort_column, :sort_direction
+
   # GET /searches
   # GET /searches.json
   def index
@@ -17,7 +19,7 @@ class SearchesController < ApplicationController
   def show
     @search = Search.where(:slug => params[:id]).first
     @search.filters = params[:filter] ? params[:filter][0] : {}
-    @es = @search.get_results params[:page]
+    @es = @search.get_results params[:page], sort_column, sort_direction
 
     respond_to do |format|
       format.html # show.html.erb
@@ -83,5 +85,18 @@ class SearchesController < ApplicationController
       format.html { redirect_to searches_url }
       format.json { head :ok }
     end
+  end
+
+  private
+
+  # TODO: refactor
+  def sort_column
+    column, direction = (params[:order] || '').split('-')
+   %w[price].include?(column) ? column : ''
+  end
+
+  def sort_direction
+    column, direction = (params[:order] || '').split('-')
+    %w[asc desc].include?(direction) ? direction : 'asc'
   end
 end

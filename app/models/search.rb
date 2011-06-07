@@ -22,7 +22,7 @@ class Search
     self.query.parameterize
   end
 
-  def get_results page
+  def get_results page, column, direction
     _query = query
     filters = @filters #(@filters) ? @filters.first : {}
     
@@ -50,6 +50,12 @@ class Search
       from (page.to_i <= 1 ? 0 : (20 * (page.to_i - 1)))
 
       fields [:id, :name, :price, :status]
+
+      unless column.empty?
+        sort do
+          send column, direction
+        end
+      end
 
       unless filters.empty?
         filter :and, facet_filter

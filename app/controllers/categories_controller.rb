@@ -1,4 +1,6 @@
 class CategoriesController < ApplicationController
+  helper_method :sort_column, :sort_direction
+
   # GET /categories
   # GET /categories.xml
   def index
@@ -14,7 +16,11 @@ class CategoriesController < ApplicationController
   # GET /categories/1.xml
   def show
     @category = Category.find(params[:id])
-    @products = @category.products.active.without(:description).page(params[:page])
+    @products = @category.products
+                         .active
+                         .without(:description)
+                         .page(params[:page])
+                         .order_by([sort_column, sort_direction])
 
     respond_to do |format|
       format.html # show.html.slim
@@ -90,5 +96,18 @@ class CategoriesController < ApplicationController
       format.html { redirect_to(categories_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  # TODO: refactor
+  def sort_column
+    column, direction = (params[:order] || '').split('-')
+   %w[name price].include?(column) ? column : ''
+  end
+
+  def sort_direction
+    column, direction = (params[:order] || '').split('-')
+    %w[asc desc].include?(direction) ? direction : 'asc'
   end
 end
