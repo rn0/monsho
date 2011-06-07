@@ -11,8 +11,11 @@ html
   body
     #wrapper
       header
-        #site-name
-          a href=root_path MonSho
+        hgroup
+          h1#site-name
+            a href=root_path MonSho
+          h2#site-description
+            'Description
         nav
           ul
             - if user_signed_in?

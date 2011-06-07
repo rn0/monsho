@@ -51,12 +51,26 @@ header {
   background: -o-linear-gradient(top, #1E5799 0%,#2989D8 50%,#7db9e8 100%); /* opera */
   position: relative;
 
-  #site-name a {
-    display: block;
-    width: 200px;
-    padding: 10px;
-    line-height: 3 * $line-height - 2 * 10px;
-    font-size: 1.5em;
+  hgroup {
+    #site-name a {
+      display: block;
+      width: 180px;
+      padding: 10px;
+      line-height: 3 * $line-height - 2 * 10px;
+      font-size: 1.5em;
+      text-decoration: none;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+
+      &:hover {
+        &:after {
+          content: " \2605";}
+      }
+    }
+
+    #site-description {
+      display: none;
+    }
   }
 
   nav {
