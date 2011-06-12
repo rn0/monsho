@@ -4,9 +4,9 @@ html
     title MonSho
     meta name="keywords" content=""
     meta name="description" content=""
-    = stylesheet_link_tag :application
-    = javascript_include_tag :application
     = csrf_meta_tag
+    = stylesheet_link_tag :application
+    = javascript_include_tag 'modernizr-2.0.4.js'
 
   body
     #wrapper
@@ -42,3 +42,5 @@ html
         = yield
       div style="clear: both"
       footer
+
+  = javascript_include_tag :application
