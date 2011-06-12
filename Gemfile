@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "3.1.0.rc1"
+gem "rails", "3.1.0.rc4"
 gem "eventmachine", "1.0.0.beta3"
 gem "thin"
 gem "mongoid",   :git => "git://github.com/mongoid/mongoid.git"
@@ -15,6 +15,7 @@ gem "sass"
 gem "slim"
 gem 'tire'
 gem "babosa"
+gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
 
 group :test, :development do
   gem 'slim-rails'
