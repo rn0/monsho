@@ -80,6 +80,48 @@ header {
   }
 }
 
+#search {
+  border-bottom: 1px solid #666;
+
+  form {
+    width: 250px;
+    padding: 5px 5px 5px 10px;
+    //background-color: #7db9e8;
+  }
+
+  label {
+    display: none;
+  }
+    
+  input[type="text"] {
+    margin-right: 5px;
+    background: #fff url(find.png) no-repeat 5px 50%;
+    border: 1px solid #efefef;
+    padding: 5px 5px 5px 25px;
+    width: 150px;
+    
+    &:focus {
+      outline: none;
+      border: 1px solid #666
+    }
+    &:hover {
+      border: 1px solid #666
+    }
+  }
+
+  input[type="submit"] {
+    padding: 5px;
+    border: 1px solid #efefef;
+    background: #fff;
+
+    &:hover {
+      border: 1px solid #666;
+      cursor: pointer;
+      color: red;
+    }
+  }
+}
+
 footer {
   background-color: #efefef;
   height: 200px;
