@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 7b72496afe18b9c239684f83d5ba896f1c7a3563
+  revision: edec32e0062ace68cf6c13d4b170d21e04a250ea
   specs:
     mongoid (2.0.2)
       activemodel (~> 3.0)
@@ -124,7 +124,7 @@ GEM
     rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.6.0)
-    rspec-rails (2.6.1.beta1)
+    rspec-rails (2.6.1)
       actionpack (~> 3.0)
       activesupport (~> 3.0)
       railties (~> 3.0)
@@ -180,7 +180,7 @@ DEPENDENCIES
   mongoid-tree
   nokogiri
   rails (= 3.1.0.rc4)
-  rspec-rails (= 2.6.1.beta1)
+  rspec-rails (= 2.6.1)
   sass
   slim
   slim-rails

@@ -19,7 +19,7 @@ gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
 
 group :test, :development do
   gem 'slim-rails'
-  gem 'rspec-rails', '2.6.1.beta1'
+  gem 'rspec-rails', '2.6.1'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   #gem 'mongoid-rspec'
