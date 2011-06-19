@@ -89,7 +89,14 @@ class Category
           }
         }
       },
-      facets: {}
+      facets: {
+        manufacturer: {
+          terms: {
+            field: 'manufacturer',
+            size: 2147483647
+          }
+        }
+      }
     }
 
     query[:sort] = [ { column => direction } ] unless column.empty?
