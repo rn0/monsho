@@ -25,4 +25,21 @@ module ApplicationHelper
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, {:order => [column, direction].join('-')}, {:class => css_class}
   end
+
+  def filter_path model, filter
+    new_filters = model.filters.merge(filter)
+    polymorphic_path(model, :filter => [new_filters])
+  end
+
+  def remove_filter_path model, filter
+    new_filters = model.filters.dup
+    new_filters.delete(filter)
+    new_filters = (new_filters.empty?) ? {} : { :filter => [new_filters] }
+
+    polymorphic_path(model, new_filters)
+  end
+
+  def active_filter? filters, filter_key
+    filters.value? filter_key
+  end
 end

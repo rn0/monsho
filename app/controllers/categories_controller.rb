@@ -16,11 +16,8 @@ class CategoriesController < ApplicationController
   # GET /categories/1.xml
   def show
     @category = Category.find(params[:id])
-    @products = @category.products
-                         .active
-                         .without(:description)
-                         .page(params[:page])
-                         .order_by([sort_column, sort_direction])
+    @category.filters = params[:filter] ? params[:filter][0] : {}
+    @result = @category.get_results params[:page], sort_column, sort_direction
 
     respond_to do |format|
       format.html # show.html.slim
@@ -103,7 +100,7 @@ class CategoriesController < ApplicationController
   # TODO: refactor
   def sort_column
     column, direction = (params[:order] || '').split('-')
-   %w[name price].include?(column) ? column : ''
+    %w[name price].include?(column) ? column : ''
   end
 
   def sort_direction

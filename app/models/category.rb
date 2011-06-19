@@ -10,11 +10,14 @@ class Category
   validates_associated :parent, :children
 
   embeds_one :stats, class_name: 'CategoryStat'
-  embeds_many :facets, class_name: 'CategoryFacet'
+  #embeds_many :facets, class_name: 'CategoryFacet'
   has_many :products
 
   @@spacer = '&mdash;'.html_safe
   cattr_accessor :spacer
+  attr_accessor :filters
+
+  INVALID_FACETS = ['www', 'Kod Producenta', 'Informacje dodatkowe', 'Opis']
 
   def self.tree
     nodes = []
@@ -56,5 +59,51 @@ class Category
 
   def path
     self.ancestors_and_self.collect(&:name).join(' / ')
+  end
+
+  def facet_fields
+    # TODO: cache
+    products.distinct('description.name') - INVALID_FACETS
+  end
+
+  def get_results page, column, direction
+    current_filters = [
+      { term: { status: true } },
+      { term: { category: name } }
+    ]
+
+    @filters.each do |filter_name, filter_value|
+      filter = { :term => { filter_name => filter_value } }
+      current_filters.push filter
+    end
+
+    query = {
+      size:   20,
+      from:   ( page.to_i <= 1 ? 0 : ( 20 * ( page.to_i - 1 ) ) ),
+      fields: [ :id, :name, :price, :status],
+
+      query: {
+        constant_score: {
+          filter: {
+            and: current_filters
+          }
+        }
+      },
+      facets: {}
+    }
+
+    query[:sort] = [ { column => direction } ] unless column.empty?
+
+    facet_fields.each do |field|
+      field = field.to_slug.normalize.to_s
+      query[:facets][field] = {
+        terms: {
+          field: field,
+          size:  2147483647
+        }
+      }
+    end
+
+    Tire.search 'monsho-catalog', query
   end
 end

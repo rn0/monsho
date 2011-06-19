@@ -7,6 +7,6 @@ table
   tbody
     - products.each do |p|
       tr
-        td = link_to p.name, product_path(p)
+        td = link_to p.name, product_path(:id => p.id)
         td = p.status
         td = number_to_currency p.price

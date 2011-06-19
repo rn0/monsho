@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe ApplicationHelper do
-  describe 'link_to_category' do
-    let(:category) do
-      Factory(:category, :name => 'test')
-    end
+  let(:category) do
+    Factory(:category, :name => 'test')
+  end
 
+  describe 'link_to_category' do
     it 'should return well formatted html' do
       category.stub_chain(:stats, :active_products).and_return(0)
       link = %{<a href="/categories/#{category.id}">test <span>0</span></a>}
@@ -26,6 +26,13 @@ describe ApplicationHelper do
         category.name = nil
         helper.link_to_category(category).should be_nil
       end
+    end
+  end
+
+  describe 'remove_filter_path' do
+    it 'should handle nil filters' do
+      category.stub(:filters).and_return(nil)
+      helper.remove_filter_path(category, { "category" => "Monitory" }).should == category_path(category)
     end
   end
 end

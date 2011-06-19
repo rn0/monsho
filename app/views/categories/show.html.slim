@@ -1,7 +1,14 @@
+- if facets = @result.facets
+  - content_for :navigation do
+    == render :partial => 'shared/facets', :locals => { :facets  => facets, :model => @category }
+
 - content_for :navigation do
   = format_tree(@category.tree_by_path.arrange) do |category|
     = link_to_category category
+
 h1 = @category.path
+
+== render :partial => 'shared/products_debug', :object => @result
 
 - if @category.stats
   table
@@ -21,21 +28,21 @@ h1 = @category.path
       th Max price
       td = number_to_currency @category.stats.max_price
 
-- unless @category.facets.empty?
-  table
-    tr
-      th Name
-      th Products
-      th Navigable
-    - @category.facets.each do |f|
-      tr
-        td = f.facet
-        td = f.count
-        td = f.navigable
+/- unless @category.facets.empty?
+/  table
+/    tr
+/      th Name
+/      th Products
+/      th Navigable
+/    - @category.facets.each do |f|
+/      tr
+/        td = f.facet
+/        td = f.count
+/        td = f.navigable
 
-- unless @products.empty?
-  == render :partial => 'shared/products', :object => @products
-  == paginate @products
+- unless @result.empty?
+  == render :partial => 'shared/products', :object => @result
+  == paginate @result
 
 #products-archive
   = link_to "Archive", archive_category_path(@category)

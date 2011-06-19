@@ -1,0 +1,11 @@
+/textarea style="width: 100%; height: 80px"
+/  = products_debug.to_json
+
+p
+  ' Found:
+  strong
+    = products_debug.total
+  '; Time:
+  strong
+    = (products_debug.time.to_f / 1000)
+    | s

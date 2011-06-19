@@ -1,56 +1,13 @@
 - content_for :navigation do
-    - @es.results.facets.each do |facet_name, values|
-      div.facets-group
-        h2 = facet_name.dup
-        ul
-          - values['terms'].each do |value, hits|
-            - if active_filter?(@search.filters, value['term'])
-              li
-                a href=remove_search_filter_path(@search, facet_name) class="active"
-                  strong [x]
-                  = value['term'].dup
-                  span #{value['count']}
-            - else
-              li
-                a href=search_filter_path(@search, facet_name => value['term'])
-                  = value['term'].dup
-                  span #{value['count']}
-
+  == render :partial => 'shared/facets', :locals => { :facets  => @es.results.facets, :model => @search }
 
 h1 = link_to @search.query, search_path(@search)
 
+== render :partial => 'shared/products_debug', :object => @es.results
 
-textarea style="width: 100%"
-  == CGI.unescape(request.fullpath)
-
-textarea style="width: 100%; height: 80px"
-  = @es.to_json
-
-p
-  ' Found:
-  strong
-    = @es.results.total
-  '; Time:
-  strong
-    = (@es.results.time.to_f / 1000)
-    | s
-
-table
-  thead
-    tr
-      th Score
-      th Name
-      th Status
-      th = sortable 'price'
-  tbody
-    - @es.results.each do |doc|
-      tr
-        td = number_with_precision doc._score
-        td = link_to doc.name, product_path(:id => doc.id)
-        td = doc.status
-        td = number_to_currency doc.price
-
-= paginate @es.results
+- unless @es.results.empty?
+  == render :partial => 'shared/products', :object => @es.results
+  == paginate @es.results
 
 = link_to 'Edit', edit_search_path(@search)
 '|
