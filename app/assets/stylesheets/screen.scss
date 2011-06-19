@@ -66,7 +66,8 @@ header {
 
       &:hover {
         &:after {
-          content: " \2605";}
+          content: " \2605";
+        }
       }
     }
 
@@ -86,7 +87,7 @@ header {
   border-bottom: 1px solid #666;
 
   form {
-    width: 250px;
+    width: 285px;
     padding: 5px 5px 5px 10px;
     //background-color: #7db9e8;
   }
@@ -112,14 +113,25 @@ header {
   }
 
   input[type="submit"] {
-    padding: 5px;
-    border: 1px solid #efefef;
-    background: #fff;
+    padding: 5px 20px 4px 20px;
+    border: 1px solid #ff7b0d;
+
+    background: #ffa84c; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffa84c 0%, #ff7b0d 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffa84c), color-stop(100%,#ff7b0d)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffa84c 0%,#ff7b0d 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffa84c 0%,#ff7b0d 100%); /* Opera11.10+ */
+    background: -ms-linear-gradient(top, #ffa84c 0%,#ff7b0d 100%); /* IE10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa84c', endColorstr='#ff7b0d',GradientType=0 ); /* IE6-9 */
+    background: linear-gradient(top, #ffa84c 0%,#ff7b0d 100%); /* W3C */
+
+    color: #fff;
+    font-weight: bold;
 
     &:hover {
       border: 1px solid #666;
       cursor: pointer;
-      color: red;
+      color: #666;
     }
   }
 }
