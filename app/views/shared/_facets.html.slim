@@ -1,7 +1,7 @@
 / TODO: performance
 - facets.each do |facet_name, values|
   div.facets-group
-    h2 = facet_name.dup
+    h2 = facet_name
     ul
       - if values['missing'] > 0
         li class='unmarked'
@@ -10,8 +10,7 @@
             span #{values['missing']}
       - values['terms'].each do |value, hits|
         li
-          / TODO: sometimes filter is not marked active
-          - if active_filter?(model.filters, value['term'])
+          - if active_filter?(model.filters, facet_name, value['term'])
             a href=remove_filter_path(model, facet_name) class="active"
               strong [x]
               = value['term']

@@ -39,7 +39,7 @@ module ApplicationHelper
     polymorphic_path(model, new_filters)
   end
 
-  def active_filter? filters, filter_key
-    filters.value? filter_key
+  def active_filter? filters, filter_name, filter_value
+    filters.key?(filter_name) && filters[filter_name] == filter_value.to_s
   end
 end
