@@ -1,23 +1,18 @@
 require 'rubygems'
-require 'Zlib'
+require 'zlib'
 require 'tire'
+require 'open-uri'
+require 'yajl/json_gem'
 #module Import
 
   class ImportA
-    TYPE_MAP = {
-      'varchar' => '_s',
-      'float' => '_f',
-      'int' => '_i',
-      'bit' => '_b'
-    }
-    
     TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE', 'True', 'Tak'].to_set
     INDEX_NAME = 'monsho-catalog'
 
     def initialize(file)
       puts "Using: #{file}"
       @start = Time.now
-      @reader = Nokogiri::XML::Reader.from_io(File.new(file))
+      @reader = Nokogiri::XML::Reader(open(file))
 
       @categories = {}
       @categories_path = {}
@@ -28,41 +23,41 @@ require 'tire'
 
       Tire.index INDEX_NAME do
         create({
-          :settings => {
-            :number_of_shards   => 1,
-            :number_of_replicas => 0
+          settings: {
+            number_of_shards:   1,
+            number_of_replicas: 0
           },
-          :mappings => {
-            :product => {
-              :dynamic_templates => [
+          mappings: {
+            product: {
+              dynamic_templates: [
                 {
-                  :facets_not_analyzed => {
-                    :path_match => 'facets.*',
-                    :mapping => {
-                      :index => 'not_analyzed'
+                  facets_not_analyzed: {
+                    path_match: 'facets.*',
+                    mapping: {
+                      index: 'not_analyzed'
                     }
                   }
                 }
               ],
-              :properties => {
-                :id             => { :type => 'string', :index => 'no' },
-                :category       => { :type => 'string', :index => 'not_analyzed' },
-                :manufacturer   => { :type => 'string', :index => 'not_analyzed' },
-                :facets         => {
-                  :properties   => {
-                    :zasilanie                => { :type => 'string' },
-                    :wydajnosc                => { :type => 'string' },
-                    :pojemnosc                => { :type => 'string' },
-                    :'wbudowana-pamiec'       => { :type => 'string' },
-                    :bateria                  => { :type => 'string' },
-                    :waga                     => { :type => 'string' },
-                    :'rozdzielczosc-wydruku'  => { :type => 'string' },
-                    :'interfejs-fdd'          => { :type => 'string' },
-                    :'napiecie-zasilania'     => { :type => 'string' },
-                    :'ciezar'                 => { :type => 'string' },
-                    :'napiecie-wejsciowe'     => { :type => 'string' },
-                    :'zdolnosc-zamrazania-na-dobe' => { :type => 'string' },
-                    :'poziom-halasu'          => { :type => 'string' },
+              properties: {
+                id:           { type: 'string', index: 'no' },
+                category:     { type: 'string', index: 'not_analyzed' },
+                manufacturer: { type: 'string', index: 'not_analyzed' },
+                facets:       {
+                  properties: {
+                    :zasilanie                => { type: 'string' },
+                    :wydajnosc                => { type: 'string' },
+                    :pojemnosc                => { type: 'string' },
+                    :'wbudowana-pamiec'       => { type: 'string' },
+                    :bateria                  => { type: 'string' },
+                    :waga                     => { type: 'string' },
+                    :'rozdzielczosc-wydruku'  => { type: 'string' },
+                    :'interfejs-fdd'          => { type: 'string' },
+                    :'napiecie-zasilania'     => { type: 'string' },
+                    :'ciezar'                 => { type: 'string' },
+                    :'napiecie-wejsciowe'     => { type: 'string' },
+                    :'zdolnosc-zamrazania-na-dobe' => { type: 'string' },
+                    :'poziom-halasu'          => { type: 'string' },
                   }
                 }
               }
@@ -92,13 +87,15 @@ require 'tire'
     def _import
       products_count = 0
 
+      puts 'Import'
+
       index_properties '-1', 30
 
       @reader.each do |node|
         next unless node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
 
         if node.name == "GrupaGlowna"
-          main_category_name = Category.find_or_create_by(:name => node.attribute("nazwa"), :parent_id => nil)
+          main_category_name = Category.find_or_create_by(name: node.attribute("nazwa"), parent_id: nil)
 
           next if node.inner_xml.empty?
 
@@ -139,7 +136,7 @@ require 'tire'
         name = "Bez nazwy"
       end
 
-      m = Manufacturer.find_or_create_by(:name => name)
+      m = Manufacturer.find_or_create_by(name: name)
 
       @manufacturer_name[id] = name
       @manufacturers[id] = m.id
@@ -150,7 +147,7 @@ require 'tire'
       sub_reader.each do |sub_node|
         next unless sub_node.name == "PodGrupa"
 
-        sub_cat = Category.find_or_initialize_by(:name => sub_node.attribute("nazwa"), :parent_id => main_category_name.id)
+        sub_cat = Category.find_or_initialize_by(name: sub_node.attribute("nazwa"), parent_id: main_category_name.id)
         sub_cat.parent = main_category_name
         sub_cat.save
 
@@ -166,7 +163,7 @@ require 'tire'
       #warehouse = 1
       category = @categories[node.attribute("grupa")]
 
-      p = Product.where(:foreign_key => foreign_key).first
+      p = Product.where(foreign_key: foreign_key).first
       p ||= Product.new
 
       p.name            = node.attribute("nazwa")
@@ -195,15 +192,15 @@ require 'tire'
         end
 
         @doc_cache.push({
-          :type => 'product',
-          :id => p.id,
-          :name => p.name,
-          :foreign_key => p.foreign_key,
-          :status => p.status,
-          :price => p.price,
-          :category => p.category_name,
-          :manufacturer => p.manufacturer_name,
-          :facets => facets
+          type:         'product',
+          id:           p.id,
+          name:         p.name,
+          foreign_key:  p.foreign_key,
+          status:       p.status,
+          price:        p.price,
+          category:     p.category_name,
+          manufacturer: p.manufacturer_name,
+          facets:       facets
         })
       else
         puts "#{foreign_key} = #{p.errors.to_a.join(";\n")}"
@@ -231,14 +228,13 @@ require 'tire'
       end
 
       { name => {
-        :name => name,
-        :value => value,
-        :type => type,
+        name:  name,
+        value: value,
+        type:  type,
       } }
     end
 
     def process_product_description node, description_crc
-      #facets = []
       description = []
       crc32 = nil
 
@@ -255,20 +251,16 @@ require 'tire'
             new_item = process_description_item sub_node
             params.merge!(new_item) do |name, v1, v2|
               {
-                :name => name,
-                :value => "#{v1[:value]} #{v2[:value]}",
-                :type => "varchar",
+                name:  name,
+                value: "#{v1[:value]} #{v2[:value]}",
+                type:  "varchar",
               }
             end
           end
         end
 
         description = params.reduce([]) do |acc, item|
-#          if item[1][:slug] && item[1][:value]
-#            facets[item[1][:slug]] = item[1][:value]
-#          end
           acc.push(ProductDescription.new(item[1]))
-          #acc
         end
       end
 
@@ -285,6 +277,7 @@ require 'tire'
     end
 
     def store docs
+      return if docs.empty?
       Tire.index INDEX_NAME do
         bulk_store docs
       end
