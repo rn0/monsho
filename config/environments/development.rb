@@ -24,5 +24,8 @@ MongoShop::Application.configure do
 
   #Slim::Engine.set_default_options :pretty => true
   Tire.configure { logger 'log/elasticsearch.log' }
+
+  # Do not compress assets
+  config.assets.compress = false
 end
 

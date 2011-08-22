@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.1.0.rc6'
 gem "eventmachine", "1.0.0.beta3"
 gem "thin"
-gem "mongoid",   :git => "git://github.com/mongoid/mongoid.git"
+gem "mongoid"
 gem "bson_ext", "~>1.3"
 gem "devise"
 gem "mongoid-tree", :require => "mongoid/tree"
@@ -15,8 +15,14 @@ gem "sass"
 gem "slim"
 gem 'tire'
 gem "babosa"
-gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
-gem 'uglifier'
+gem "yajl-ruby"
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails', "  ~> 3.1.0.rc"
+  gem 'uglifier'
+end
 
 group :test, :development do
   gem 'slim-rails'
@@ -24,6 +30,6 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   #gem 'mongoid-rspec'
-  gem 'spork', '~> 0.9.0.rc'
+  gem 'spork', '~> 0.9.0.rc9'
   gem 'valid_attribute'
 end
