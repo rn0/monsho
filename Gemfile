@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1'
+gem 'rails', '3.1.1'
 gem "eventmachine", "1.0.0.beta3"
 gem "thin"
 gem "mongoid"
@@ -13,7 +13,7 @@ gem "jquery-rails"
 gem "sass"
 #gem "mongo-rails-instrumentation"
 gem "slim"
-gem 'tire'
+gem "tire"
 gem "babosa"
 gem "yajl-ruby"
 
