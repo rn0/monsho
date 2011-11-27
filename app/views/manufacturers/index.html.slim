@@ -1,0 +1,22 @@
+h1 Listing manufacturers
+
+- @manufacturers.each do |index, group|
+  h2= index
+
+  table
+    tr
+      th Name
+      th
+      th
+      th
+
+    - group.each do |manufacturer|
+      tr
+        td= link_to manufacturer.name, manufacturer
+        td= link_to 'Show', manufacturer
+        td= link_to 'Edit', edit_manufacturer_path(manufacturer)
+        td= link_to 'Destroy', manufacturer, :confirm => 'Are you sure?', :method => :delete
+
+br
+
+= link_to 'New Manufacturer', new_manufacturer_path

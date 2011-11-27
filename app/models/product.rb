@@ -28,9 +28,9 @@ class Product
 
   after_validation :validate_description
   def validate_description
-    if not self.errors.empty?
+    unless self.errors.empty?
       self.description.each do |d|
-        d.errors.each{ |attr, msg| self.errors.add(attr, msg) }
+        d.errors.each { |attr, msg| self.errors.add(attr, msg) }
       end
     end
   end
