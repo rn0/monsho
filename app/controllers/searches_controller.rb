@@ -19,7 +19,7 @@ class SearchesController < ApplicationController
   def show
     @search = Search.where(:slug => params[:id]).first
     @search.filters = params[:filter] ? params[:filter][0] : {}
-    @es = @search.get_results params[:page], sort_column, sort_direction
+    @result = @search.get_results params[:page], sort_column, sort_direction
 
     respond_to do |format|
       format.html # show.html.erb

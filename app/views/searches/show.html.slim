@@ -1,13 +1,14 @@
-- content_for :navigation do
-  == render :partial => 'shared/facets', :locals => { :facets  => @es.results.facets, :model => @search }
+- if facets = @result.facets
+  - content_for :navigation do
+    == render :partial => 'shared/facets', :locals => { :facets  => facets, :model => @search }
 
 h1 = link_to @search.query, search_path(@search)
 
-== render :partial => 'shared/products_debug', :object => @es.results
+== render :partial => 'shared/products_debug', :object => @result
 
-- unless @es.results.empty?
-  == render :partial => 'shared/products', :object => @es.results
-  == paginate @es.results
+- unless @result.empty?
+  == render :partial => 'shared/products', :object => @result
+  == paginate @result
 
 = link_to 'Edit', edit_search_path(@search)
 '|

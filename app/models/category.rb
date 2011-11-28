@@ -110,7 +110,7 @@ class Category
         }
       }
     end
-
+    #logger.debug query.to_json
     Tire.search 'monsho-catalog', query
   end
 end

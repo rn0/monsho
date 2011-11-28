@@ -24,50 +24,74 @@ class Search
 
   def get_results page, column, direction
     _query = query
+    logger.debug _query
     filters = @filters #(@filters) ? @filters.first : {}
-    
-    facet_filter = []
+
+    facet_filters = []
+    #facet_filters = [{
+    #  term: {
+    #    status: true
+    #  }
+    #}]
     filters.each do |filter_name, filter_value|
       filter = {
-        :term => {
+        term: {
           filter_name => filter_value
         }
       }
-      facet_filter.push filter
+      facet_filters.push filter
     end
 
-    facet_options = { :size => 20 }
-    unless filters.empty?
-      facet_options.merge!(:facet_filter => { :and => facet_filter })
+    query = {
+      size:   20,
+      from:   ( page.to_i <= 1 ? 0 : ( 20 * ( page.to_i - 1 ) ) ),
+      fields: [ :id, :name, :price, :status],
+
+      query: {
+        bool: {
+          must: {
+            text: {
+              name: _query
+            }
+          },
+          should: {
+            term: {
+              status: true
+            }
+          }
+        },
+      },
+
+      facets: {
+        category: {
+          terms: {
+            field: 'category',
+            size: 20,
+            all_terms: false
+          },
+        },
+        manufacturer: {
+          terms: {
+            field: 'manufacturer',
+            size: 20,
+            all_terms: false
+          }
+        }
+      }
+    }
+    query[:sort] = [ { column => direction } ] unless column.empty?
+    unless facet_filters.empty?
+      query[:filter] = { and: facet_filters }
+
+      filter = { facet_filter: { and: facet_filters } }
+
+      query[:facets][:manufacturer].merge!(filter)
+      query[:facets][:category].merge!(filter)
     end
 
-    Tire.search 'monsho-catalog' do
-      query do
-        string "name:#{_query}"
-      end
-
-      size 20
-      from (page.to_i <= 1 ? 0 : (20 * (page.to_i - 1)))
-
-      fields [:id, :name, :price, :status]
-
-      unless column.empty?
-        sort do
-          send column, direction
-        end
-      end
-
-      unless filters.empty?
-        filter :and, facet_filter
-      end
-      
-      facet 'category' do
-        terms :category, facet_options
-      end
-      facet 'manufacturer' do
-        terms :manufacturer, facet_options
-      end
-    end
+    logger.debug query.to_json
+    query.to_json
+    Tire.search 'monsho-catalog', query
   end
   
   private

@@ -57,3 +57,6 @@ module MongoShop
     end
   end
 end
+
+require 'tire/rails-logger'
+

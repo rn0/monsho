@@ -34,30 +34,19 @@ require 'yajl/json_gem'
                   facets_not_analyzed: {
                     path_match: 'facets.*',
                     mapping: {
-                      index: 'not_analyzed'
+                      index: 'not_analyzed',
+                      type: "string",
                     }
                   }
                 }
               ],
               properties: {
-                id:           { type: 'string', index: 'no' },
+                id:           { type: 'string', index: 'no', store: 'no' },
                 category:     { type: 'string', index: 'not_analyzed' },
                 manufacturer: { type: 'string', index: 'not_analyzed' },
                 facets:       {
                   properties: {
-                    :zasilanie                => { type: 'string' },
-                    :wydajnosc                => { type: 'string' },
-                    :pojemnosc                => { type: 'string' },
-                    :'wbudowana-pamiec'       => { type: 'string' },
-                    :bateria                  => { type: 'string' },
-                    :waga                     => { type: 'string' },
-                    :'rozdzielczosc-wydruku'  => { type: 'string' },
-                    :'interfejs-fdd'          => { type: 'string' },
-                    :'napiecie-zasilania'     => { type: 'string' },
-                    :'ciezar'                 => { type: 'string' },
-                    :'napiecie-wejsciowe'     => { type: 'string' },
-                    :'zdolnosc-zamrazania-na-dobe' => { type: 'string' },
-                    :'poziom-halasu'          => { type: 'string' },
+                    :'*' => { type: 'string' }
                   }
                 }
               }
